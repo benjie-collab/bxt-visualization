@@ -23,10 +23,13 @@ function bxtviz_admin_scripts() {
 	/** Chart Libs **/
 	wp_register_script('knockoutjs', BXT_VIZ_URL.'/lib/knockout-3.2.0.js' );
 	wp_register_script('globalize', BXT_VIZ_URL.'/lib/globalize.js' );
-	wp_register_script('dxchartjs', BXT_VIZ_URL.'/lib/dx.chartjs.js' );	
+	wp_register_script('dxchartjs', BXT_VIZ_URL.'/lib/dx.all.js' );	
 	wp_enqueue_script(array('jquery', 'knockoutjs'));
 	wp_enqueue_script(array('jquery', 'globalize'));
 	wp_enqueue_script(array('jquery', 'dxchartjs'));
+	
+	/** Map Data **/
+	wp_enqueue_script('dxchart-map-world', BXT_VIZ_URL.'/data/world.js');
 	
 	
 	/**
@@ -41,10 +44,14 @@ function bxtviz_admin_scripts() {
 	wp_enqueue_script('codemirror-addon-matchbrackets', BXT_VIZ_URL.'/lib/codemirror/addon/edit/matchbrackets.js' );
 	wp_enqueue_script('codemirror-addon-wrap', BXT_VIZ_URL.'/lib/codemirror/addon/wrap/hardwrap.js' );
 	wp_enqueue_style( 'codemirror', BXT_VIZ_URL .'/lib/codemirror/lib/codemirror.css' );
+	
+	wp_enqueue_script('codemirror-model', BXT_VIZ_URL.'/js/model/codemirror.js' );
 
 
 	/** Chart View Model **/
-	wp_register_script('bxtviz-buildchart', BXT_VIZ_URL.'/js/build-chart.js' );
+	wp_register_script('bxtviz-chart-model', BXT_VIZ_URL.'/js/model/chart.js' );
+	wp_enqueue_script(array('jquery', 'bxtviz-chart-model'));
+	wp_register_script('bxtviz-buildchart', BXT_VIZ_URL.'/js/model/build-chart.js' );
 	wp_enqueue_script(array('jquery', 'bxtviz-buildchart'));
 	wp_register_script('bxtviz-charts', BXT_VIZ_URL.'/js/charts.js' );
 	
@@ -52,7 +59,7 @@ function bxtviz_admin_scripts() {
 	/**
 	wp_enqueue_style( 'jquery-ui', 'http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css' );
 	wp_enqueue_style( 'bxtvizBasic', BXT_VIZ_URL .'/css/basic.css' );**/
-	wp_enqueue_style( 'bxtvizCustom', BXT_VIZ_URL .'/css/custom.css' );
+	wp_enqueue_style( 'bxtvizCustom', BXT_VIZ_URL .'/css/admin-custom.css' );
 	wp_enqueue_style( 'bxtvizAdmin', BXT_VIZ_URL .'/css/bxtviz-admin.css' );
 	
 	/** Bootstrap **/	

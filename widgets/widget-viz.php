@@ -65,8 +65,11 @@ class bxtviz_plugin extends WP_Widget {
 
 	// widget display
 	function widget($args, $instance) {
+		
 		extract( $args );
 	   // these are the widget options
+	   
+	  
 	   $title = apply_filters('widget_title', $instance['title']);
 	   $id = $instance['id'];
 	   
@@ -77,21 +80,22 @@ class bxtviz_plugin extends WP_Widget {
 	   
 	   $charts = $wpdb->get_results( "SELECT * FROM " .  $wpdb->prefix . $bxtviz_db_name . ' WHERE ID = ' . $id); 	
 	   $charts = reset($charts);
-	   
+	   $randomString = bxtviz_plugin_getRandomCode();
 	
 	   echo $before_widget;
 	   
 	   // Display the widget
-	   echo '<div class="widget-text" id="bxtviz-fe-' . $instance['id'] . '-container">';	   
+	   echo '<div class="widget-text" id="bxtviz-fe-' . $charts->id . $randomString  . '-container">';	   
 	   // Check if title is set
 	   if ( $title ) {
 		  echo $before_title . $title . $after_title;
 	   }	 
 		echo '';
-	   echo '<div id="bxtviz-fe-' . $instance['id'] . '" class="">' . 
-			'</div>';
+	   echo '<div id="bxtviz-fe-' . $charts->id . $randomString . '" class="">' . '</div>';
 	   echo '</div>';
 	   
+	    
+		
 	   ?>			
 		<script>		
 			jQuery(document).ready(function($){
@@ -121,13 +125,13 @@ class bxtviz_plugin extends WP_Widget {
 									data		: ndata,
 									palette		: '<?php echo $charts->palette ?>',
 									type		: '<?php echo $charts->type ?>',
-									container	: '#bxtviz-fe-<?php echo $id ?>',							
+									container	: '#bxtviz-fe-<?php echo $charts->id . $randomString ?>',							
 								});								
 						viz.config.subscribe(viz.init);					
 						viz.data.subscribe(viz.init);	
 						viz.s.subscribe(viz.init);					
-						ko.cleanNode($('#bxtviz-fe-<?php echo $id ?>-container')[0]); // clean it again
-						ko.applyBindings(viz, jQuery('#bxtviz-fe-<?php echo $id ?>-container')[0]);
+						ko.cleanNode($('#bxtviz-fe-<?php echo $charts->id . $randomString ?>-container')[0]); // clean it again
+						ko.applyBindings(viz, jQuery('#bxtviz-fe-<?php echo $charts->id . $randomString?>-container')[0]);
 						viz.init();
 				}else{
 						alert('Check the chart options as well as Data format');
@@ -138,10 +142,80 @@ class bxtviz_plugin extends WP_Widget {
 		</script>
 		
 		<?php		
-	   echo $after_widget;
+	   echo $after_widget;		   
+		
+	}
+	
+	
+	
+	function bxtviz_plugin_sc($atts){
+		ob_start();
+		global $bxtvizopts;
+		global $wpdb;
+		global $bxtviz_db_name;
 	   
+		$charts = $wpdb->get_results( "SELECT * FROM " .  $wpdb->prefix . $bxtviz_db_name . ' WHERE ID = ' . $atts['id']); 	
+		$charts = reset($charts);
+		$randomString = bxtviz_plugin_getRandomCode();
+	
+		echo $before_widget;
 	   
-	   
+		// Display the widget
+		echo '<div class="widget-text" id="bxtviz-fe-' . $charts->id . $randomString  . '-container">';	   
+		// Check if title is set
+		if ( $title ) {
+		  echo $before_title . $title . $after_title;
+		}	 
+		echo '';
+		echo '<div id="bxtviz-fe-' . $charts->id . $randomString . '" class="bxtviz-container">' . '</div>';
+		echo '</div>';
+	   ?>			
+		<script>		
+			jQuery(document).ready(function($){
+				
+				var IS_VALID_OPT = true, IS_VALID_DATA = true;
+							   try{
+									var nconfig = (new Function("return " + <?php echo JSON_encode($charts->config)?>.replace(/(\r\n|\n|\r|\t|\s+)/gm," ")))();
+							   }
+							   catch(err){
+									IS_VALID_OPT = false;
+							   }  
+							   
+				
+							   try{
+									var ndata = (new Function("return " + <?php echo JSON_encode($charts->data)?>.replace(/(\r\n|\n|\r|\t|\s+)/gm," ")))();							
+							   }
+							   catch(err) {
+									IS_VALID_DATA = false;
+							   }  
+							   
+				if(IS_VALID_OPT === true && IS_VALID_DATA === true){
+					var viz = new bxtVizFrontEndModel({
+									s			: '<?php echo get_search_query() ?>',
+									params		: [],							
+									config		: nconfig,
+									data		: ndata,
+									palette		: '<?php echo $charts->palette ?>',
+									type		: '<?php echo $charts->type ?>',
+									container	: '#bxtviz-fe-<?php echo $charts->id . $randomString ?>',							
+								});								
+						viz.config.subscribe(viz.init);					
+						viz.data.subscribe(viz.init);	
+						viz.s.subscribe(viz.init);					
+						ko.cleanNode($('#bxtviz-fe-<?php echo $charts->id . $randomString ?>-container')[0]); // clean it again
+						ko.applyBindings(viz, jQuery('#bxtviz-fe-<?php echo $charts->id . $randomString?>-container')[0]);
+						viz.init();
+				}else{
+						alert('Check the chart options as well as Data format');
+					}
+			
+			});
+						
+		</script>		
+		<?php
+		
+		$output = ob_get_clean();
+		return $output;
 	}
 }
 // register widget
@@ -149,6 +223,19 @@ add_action('widgets_init', create_function('', 'return register_widget("bxtviz_p
 
 
 
+add_shortcode( 'bxtviz', array( 'bxtviz_plugin', 'bxtviz_plugin_sc' ) );
+
+
+function bxtviz_plugin_getRandomCode(){
+    $an = "abcdefghijklmnopqrstuvwxyz-_";
+    $su = strlen($an) - 1;
+    return substr($an, rand(0, $su), 1) .
+            substr($an, rand(0, $su), 1) .
+            substr($an, rand(0, $su), 1) .
+            substr($an, rand(0, $su), 1) .
+            substr($an, rand(0, $su), 1) .
+            substr($an, rand(0, $su), 1);
+}
 
 
 

@@ -124,7 +124,7 @@ function bxtviz_previewchart(){
 		?>			
 			
 			<script>				
-				var nch = new buildChartModel({
+				var viz = new buildChartModel({
 								isnew: <?php echo ((isset($charts->id) && $charts->id !== '')? '0' : '1'); ?>,
 								config: <?php echo JSON_encode($charts->config)?>,
 								type: '<?php echo $_GET['new-type'] ?>',
@@ -135,15 +135,14 @@ function bxtviz_previewchart(){
 								palettes: <?php echo JSON_encode($options['palettes']) ?>,
 								palette: '<?php echo $charts->palette ?>',	
 								container: '#add-chart-preview',
-								configtabs: <?php echo JSON_encode($options['configtabs']) ?>,
-								
-							});	
-							
-					nch.config.subscribe(nch.initChart);					
-					nch.data.subscribe(nch.initChart);		
+								configtabs: <?php echo JSON_encode($options['configtabs']) ?>,								
+							});								
+					viz.config.subscribe(viz.initChart);					
+					viz.data.subscribe(viz.initChart);		
+					viz.selectedPalette.subscribe(viz.init);
 					ko.cleanNode(jQuery('#add-chart-preview-container')[0]); // clean it again
-					ko.applyBindings(nch, jQuery('#add-chart-preview-container')[0]);
-					nch.initChart();				
+					ko.applyBindings(viz, jQuery('#add-chart-preview-container')[0]);
+					viz.initChart();				
 			</script>
 			
 			<?php

@@ -43,6 +43,7 @@ wp_enqueue_script(array('jquery', 'bxtviz-charts'));
 						<a class="" href="#"><i class="fa fa-ban"></i></a>
 					</span>				
 				</h3>
+				<p data-bind="text: '[bxtviz id=' + $data.id + ']'"></p>
 			</div>
 		</div>			
 	</div>

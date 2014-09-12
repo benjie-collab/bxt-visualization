@@ -1,5 +1,5 @@
 jQuery(document).ready(function($){	
-/**
+	/**
 	ko.bindingHandlers.gridGallery = {
 		cbpgg : ko.observable() ,
 		init: function(element, valueAccessor){	
@@ -64,16 +64,45 @@ jQuery(document).ready(function($){
 									}
 							$(cont)	.delay(500)  
 									.animate({ top: '-10px' }, 10)
-									.animate({ top: '0' }, 400);							
+									.animate({ top: '0' }, 400);
+									
 							
+							var IS_VALID_OPT = true, IS_VALID_DATA = true;
+							try{
+								var nconfig = (new Function("return " + dta.config.replace(/(\r\n|\n|\r|\t|\s+)/gm," ")))();
+							}
+							catch(err){
+								IS_VALID_OPT = false;
+							}   
+
+							try{
+								var ndata = (new Function("return " + dta.data.replace(/(\r\n|\n|\r|\t|\s+)/gm," ")))();							
+							}
+							catch(err) {
+								IS_VALID_DATA = false;
+							}  
 							
-							self.nChart = bxtviz_buildChart({								
-								config: dta.config,
-								data: dta.data,
-								palette: dta.palette,
-								type: dta.type.toLowerCase(),
-								container: $(cont).find('.bxtviz-chart-container')
-							})		
+							var wrap = $(cont).find('.bxtviz-chart-container');
+										   
+							if(IS_VALID_OPT === true && IS_VALID_DATA === true){
+								var viz = new bxtVizFrontEndModel({
+												s			: '*',
+												params		: [],							
+												config		: nconfig,
+												data		: ndata,
+												palette		: dta.palette,
+												type		: dta.type,
+												container	: wrap,							
+											});								
+									viz.config.subscribe(viz.init);					
+									viz.data.subscribe(viz.init);	
+									viz.s.subscribe(viz.init);					
+									ko.cleanNode(jQuery(wrap)[0]); // clean it again
+									ko.applyBindings(viz, jQuery(wrap)[0]);
+									viz.init();
+							}else{
+								alert('Check the chart options as well as Data format');
+							}
 								
 							return false;
 							
@@ -83,8 +112,7 @@ jQuery(document).ready(function($){
 	
 	var viz = new bxtvizModel();
 	viz.tp.subscribe(function(newValue) {	});
-	viz.chartchoices(bxtviz.data);
-	
+	viz.chartchoices(bxtviz.data);	
 	ko.applyBindings(viz);
 	
 	

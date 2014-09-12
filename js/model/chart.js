@@ -24,7 +24,36 @@ function bxtVizFrontEndModel(opts) {
 								options['dataSource'] = self.data();
 								chart = jQuery(self.container)
 								.dxChart(options);
+							}else if(self.type.toLowerCase() === 'range selector')	{	
+								options['dataSource'] = self.data();
+								chart = jQuery(self.container)
+								.dxRangeSelector(options);
+							}else if(self.type.toLowerCase() === 'circular gauges')	{	
+								options['rangeContainer']['ranges'] = self.data();
+								options['rangeContainer']['palette'] = self.palette();
+								chart = jQuery(self.container)
+								.dxCircularGauge(options);
+							}else if(self.type.toLowerCase() === 'linear gauges')	{	
+								options['rangeContainer']['ranges'] = self.data();
+								options['rangeContainer']['palette'] = self.palette();
+								chart = jQuery(self.container)
+								.dxLinearGauge(options);
+							}else if(self.type.toLowerCase() === 'bar gauge')	{	
+								options['values'] = self.data();
+								chart = jQuery(self.container)
+								.dxBarGauge(options);
+							}else if(self.type.toLowerCase() === 'sparklines')	{	
+								options['dataSource'] = self.data();
+								chart = jQuery(self.container)
+								.dxSparkline(options);
+							}else if(self.type.toLowerCase() === 'vector map')	{	
+								options['markers'] = self.data();
+								chart = jQuery(self.container)
+								.dxVectorMap(options);
 							}
+							
+							
+							
 							
 						
 						//return chart;
