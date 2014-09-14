@@ -30,6 +30,18 @@ wp_enqueue_script(array('jquery', 'bxtviz-charts'));
 		</ul>
 		</div>
 	</div>	
+    <!-- ko if(charts().length ===0) -->
+    <div class="row">	
+		<div class="col-md-3 col-sm-4 bxtviz-chart-block m-b-10">
+			<div class="white-blocks text-center">
+				<div class=""><h1><a class="btn btn-xl btn-warning thickbox" title="Add New Visualization" href="admin-ajax.php?id=&action=bxtviz_select_chart_type">Add New</a></h1></div>
+                <p>No Visualizations Yet Click Add New</p>
+			</div>
+            
+		</div>			
+	</div>
+    <!-- /ko -->
+    
 	<div class="row" data-bind=" foreach: { data: charts, afterRender: initChart } ">	
 		<div class="col-md-3 col-sm-4 bxtviz-chart-block m-b-10">
 			<div class="white-blocks">

@@ -80,6 +80,7 @@ function bxtviz_admin_scripts() {
 
 function bxtviz_admin_page_callback(){ 
 	ob_start();
+	add_thickbox();
 	?>
     <div class="wrap bootstrapped" id="bxtviz-option-page">				
 		<h2>DXChart Visualizations <a class="button-primary thickbox" title="Add New Visualization" href="admin-ajax.php?id=&action=bxtviz_select_chart_type">Add New</a></h2>

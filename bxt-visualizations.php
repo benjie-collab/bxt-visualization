@@ -381,7 +381,8 @@ function bxtviz_install() {
 	$opts = array(
 						'types' => $bxtviz_types,
 						'palettes' => $bxtviz_palettes,
-						'data' => $bxtviz_data
+						'data' => $bxtviz_data,
+						'configtabs' => $bxtviz_configtabs
 						);
 
 	$table_name = $wpdb->prefix . $bxtviz_db_name;
@@ -489,14 +490,16 @@ function bxtviz_update_db_check() {
 add_action( 'plugins_loaded', 'bxtviz_update_db_check' );
 
 
-/**
+//echo JSON_encode(get_option('bxtviz_options'));
+
+
 $opts = array(
 						'types' => $bxtviz_types,
 						'palettes' => $bxtviz_palettes,
 						'data' => $bxtviz_data,
 						'configtabs' => $bxtviz_configtabs
 						);
-	update_option('bxtviz_options', $opts);**/
+	update_option('bxtviz_options', $opts);
 
 
 

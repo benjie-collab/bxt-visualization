@@ -41,14 +41,19 @@ class bxtviz_plugin extends WP_Widget {
 		</p>
 		
 		<p>
+        <?php if ( count($charts) !== 0){ ?>
 		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Select Viz:', 'bxtviz_widget_plugin'); ?></label>
+        
 		<select class="widefat" id="<?php echo $this->get_field_id('id'); ?>" name="<?php echo $this->get_field_name('id'); ?>">
 			<?php 
 				foreach($charts as $key =>$viz):
 					echo '<option value="' . $viz->id . '" ' . (($id===$viz->id)? 'selected': '' ). '>' . $viz->name . '</option>';
 				endforeach;
 			?>
-		</select>		
+		</select>	
+        <?php }else{ ?>	
+        	No current visualizations to add. <br/> Add one at Settings > DXChart Viz.
+        <?php } ?>
 		</p>		
 
 		<?php
@@ -91,7 +96,7 @@ class bxtviz_plugin extends WP_Widget {
 		  echo $before_title . $title . $after_title;
 	   }	 
 		echo '';
-	   echo '<div id="bxtviz-fe-' . $charts->id . $randomString . '" class="">' . '</div>';
+	   echo '<div id="bxtviz-fe-' . $charts->id . $randomString . '" class="bxtviz-container">' . '</div>';
 	   echo '</div>';
 	   
 	    
