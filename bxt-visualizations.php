@@ -514,7 +514,7 @@ function bxtviz_uninstall(){
 	}
 	delete_option('bxtviz_options');
 	
-	$table_name = $wpdb->prefix.bxtviz_db_name;
+	$table_name = $wpdb->prefix . $bxtviz_db_name;
 
 	$sql = "DROP TABLE ". $table_name;
 
