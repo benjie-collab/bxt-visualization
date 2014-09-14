@@ -384,7 +384,7 @@ function bxtviz_install() {
 	global $bxtviz_data;
 	global $bxtviz_configtabs;
 	
-	
+	delete_option('bxtviz_options');
 	$opts = array(
 						'types' => $bxtviz_types,
 						'palettes' => $bxtviz_palettes,
@@ -497,7 +497,7 @@ function bxtviz_update_db_check() {
 add_action( 'plugins_loaded', 'bxtviz_update_db_check' );
 
 
-delete_option('bxtviz_options');
+//delete_option('bxtviz_options');
 
 
 /**
